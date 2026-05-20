@@ -39,3 +39,25 @@ not merge theory. gitignore verified: 45 md/yaml/json tracked, all pdf/png ignor
 3. write papers/index.md, commit papers
 4. deep review writeup (pending)
 5. Hypothesis-heavy test additions (pending Q sign-off)
+
+### Baseline (2026-05-20)
+32 tests pass, pyright 0 errors. Commits: 526b184 gitignore, 495b626 papers,
+1e0e6c9 notes.
+
+### Findings (verified)
+- P0 BUG (runtime-confirmed): non-finite `SourceAssignment.weight` → `solve`
+  returns `winners=()` with `admissible_count>0` and `reason=None`. Silent wrong
+  result. nan weight: winners empty. inf weight: score nan/inf, winners empty.
+  Negative weight: silently inverts merge (winner = farthest value). `weight` has
+  zero validation. Fix: validate finite (>=0) in `SourceAssignment.__post_init__`.
+- P1: assignment-level dedup in `enumerate_candidate_assignments`
+  (`any(existing.values == assignment.values ...)`) is provably dead code —
+  product of per-concept deduped domains is always all-unique. O(n^2) for nothing.
+- P1: `solve` raises `RuntimeError` on `EnumerationExceeded` — inconsistent with
+  anytime design + the no-admissible `Result(reason=...)` path. Test pins it.
+- P1: `reason="no admissible assignments"` is wrong when cause is "declared
+  concept had no observed values" or "no sources".
+- P1: `JsonScalar`/`JsonValue` in model.py — unused, unexported. Dead.
+- Tests: no Result-invariant properties, no idempotence, weight barely tested,
+  no claim_distance metric properties, validation paths untested.
+- Packaging: no LICENSE, no `license` field, no CI, `pytest-timeout` dep unused.
