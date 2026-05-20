@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from enum import StrEnum
+from types import MappingProxyType
 from typing import Any
 
 
@@ -17,7 +18,10 @@ class Assignment:
     values: Mapping[str, object]
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, "values", dict(self.values))
+        object.__setattr__(self, "values", MappingProxyType(dict(self.values)))
+
+    def __hash__(self) -> int:
+        return hash(tuple(sorted(self.values.items())))
 
     def value_for(self, concept_id: str) -> object:
         return self.values.get(concept_id)
