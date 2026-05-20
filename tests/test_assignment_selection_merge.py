@@ -39,6 +39,12 @@ st_branch_profile = st.dictionaries(
     min_size=2,
     max_size=5,
 )
+st_assignment_values = st.dictionaries(
+    keys=st.from_regex(r"concept_[a-z]{1,5}", fullmatch=True),
+    values=st.integers(min_value=-1000, max_value=1000),
+    min_size=1,
+    max_size=5,
+)
 st_small_assignment_value = st.integers(min_value=0, max_value=2)
 
 
@@ -208,6 +214,24 @@ class TestClaimDistance:
 
 
 class TestAssignmentSelectionSolver:
+    @pytest.mark.property
+    @given(st_assignment_values)
+    @settings(deadline=None, suppress_health_check=[HealthCheck.too_slow])
+    def test_assignment_values_are_immutable_and_hashable(
+        self,
+        values: dict[str, int],
+    ) -> None:
+        assignment = Assignment(values)
+        same_assignment = Assignment(dict(values))
+        first_key = next(iter(values))
+
+        values[first_key] += 1
+
+        assert assignment == same_assignment
+        assert hash(assignment) == hash(same_assignment)
+        with pytest.raises(TypeError):
+            assignment.values[first_key] = values[first_key]
+
     @pytest.mark.parametrize("bad_value", [float("nan"), float("inf"), float("-inf")])
     def test_solve_rejects_non_finite_numeric_claim_values(self, bad_value: float) -> None:
         problem = _scalar_profile_problem(
