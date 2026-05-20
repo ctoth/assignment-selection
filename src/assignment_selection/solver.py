@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from itertools import product
+from math import isfinite
 from typing import Any, overload
 
 from assignment_selection.model import (
@@ -24,9 +25,12 @@ class EnumerationExceeded:
 def claim_distance(a: Any, b: Any) -> float:
     """Distance between two claim values."""
     try:
-        return abs(float(a) - float(b))
+        distance = abs(float(a) - float(b))
     except (ValueError, TypeError):
         return 0.0 if a == b else 1.0
+    if not isfinite(distance):
+        raise ValueError("claim distance is non-finite")
+    return distance
 
 
 def _unique_sources(
