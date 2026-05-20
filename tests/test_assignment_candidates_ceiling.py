@@ -6,9 +6,7 @@ C:/Users/Q/code/propstore/tests/remediation/phase_8_dos_anytime/test_T8_1_assign
 
 from __future__ import annotations
 
-import pytest
-
-from assignment_selection import Assignment, Problem, SourceAssignment
+from assignment_selection import Assignment, Problem, Result, SourceAssignment
 from assignment_selection.solver import EnumerationExceeded, enumerate_candidate_assignments, solve
 
 
@@ -43,5 +41,9 @@ def test_solve_enforces_candidate_ceiling() -> None:
         ),
     )
 
-    with pytest.raises(RuntimeError, match="candidate enumeration exceeded"):
-        solve(problem, max_candidates=1_000)
+    result = solve(problem, max_candidates=1_000)
+
+    assert isinstance(result, Result)
+    assert result.winners == ()
+    assert result.admissible_count == 0
+    assert result.reason == "candidate enumeration exceeded ceiling of 1000"
