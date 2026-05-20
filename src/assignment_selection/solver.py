@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from itertools import product
-from typing import overload
+from typing import Any, overload
 
 from assignment_selection.model import (
     Assignment,
@@ -21,7 +21,7 @@ class EnumerationExceeded:
     max_candidates: int
 
 
-def claim_distance(a: object, b: object) -> float:
+def claim_distance(a: Any, b: Any) -> float:
     """Distance between two claim values."""
     try:
         return abs(float(a) - float(b))
@@ -49,7 +49,7 @@ def _assignment_tiebreak_key(
 ) -> tuple[tuple[int, float | str], ...]:
     key: list[tuple[int, float | str]] = []
     for concept_id in concept_ids:
-        value = assignment.value_for(concept_id)
+        value: Any = assignment.value_for(concept_id)
         try:
             key.append((0, float(value)))
         except (TypeError, ValueError):
