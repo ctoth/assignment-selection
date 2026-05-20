@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from enum import StrEnum
@@ -32,6 +33,13 @@ class SourceAssignment:
     source_id: str
     assignment: Assignment
     weight: float = 1.0
+
+    def __post_init__(self) -> None:
+        weight = self.weight
+        if not math.isfinite(weight) or weight < 0:
+            raise ValueError(
+                f"SourceAssignment weight must be finite and non-negative, got {weight!r}"
+            )
 
 
 @dataclass(frozen=True)
