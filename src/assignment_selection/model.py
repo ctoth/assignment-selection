@@ -5,7 +5,6 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from enum import StrEnum
 from types import MappingProxyType
-from typing import Any
 
 
 class MergeOperator(StrEnum):
@@ -114,7 +113,3 @@ class Result:
     admissible_count: int
     total_candidate_count: int
     reason: str | None = None
-
-
-JsonScalar = str | int | float | bool | None
-JsonValue = JsonScalar | tuple["JsonValue", ...] | Mapping[str, Any]

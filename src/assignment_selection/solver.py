@@ -123,8 +123,7 @@ def enumerate_candidate_assignments(
                 for concept_id, value in zip(problem.concept_ids, choice, strict=True)
             }
         )
-        if not any(existing.values == assignment.values for existing in result):
-            result.append(assignment)
+        result.append(assignment)
     return tuple(result)
 
 
