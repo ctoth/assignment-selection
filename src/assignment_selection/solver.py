@@ -189,7 +189,25 @@ def solve(problem: Problem, *, max_candidates: int | None = None) -> Result:
     """Solve one assignment-level assignment-selection merge problem."""
     candidates = enumerate_candidate_assignments(problem, max_candidates=max_candidates)
     if isinstance(candidates, EnumerationExceeded):
-        raise RuntimeError("candidate enumeration exceeded during solve")
+        return Result(
+            winners=tuple(),
+            scored_candidates=tuple(),
+            admissible_count=0,
+            total_candidate_count=candidates.partial_count,
+            reason=(
+                "candidate enumeration exceeded ceiling of "
+                f"{candidates.max_candidates}"
+            ),
+        )
+
+    if not candidates:
+        return Result(
+            winners=tuple(),
+            scored_candidates=tuple(),
+            admissible_count=0,
+            total_candidate_count=0,
+            reason="no candidate assignments to enumerate",
+        )
 
     admissible = tuple(
         candidate
