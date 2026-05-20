@@ -208,6 +208,16 @@ class TestClaimDistance:
 
 
 class TestAssignmentSelectionSolver:
+    @pytest.mark.parametrize("bad_value", [float("nan"), float("inf"), float("-inf")])
+    def test_solve_rejects_non_finite_numeric_claim_values(self, bad_value: float) -> None:
+        problem = _scalar_profile_problem(
+            {"b1": bad_value, "b2": 1.0},
+            operator=MergeOperator.SIGMA,
+        )
+
+        with pytest.raises(ValueError, match="non-finite"):
+            solve(problem)
+
     def test_enumerates_observed_candidate_assignments(self) -> None:
         problem = Problem(
             concept_ids=("x", "y"),
