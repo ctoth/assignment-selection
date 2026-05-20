@@ -186,9 +186,9 @@ def _score_assignment(
     raise ValueError(f"Unknown merge operator: {problem.operator}")
 
 
-def solve(problem: Problem) -> Result:
+def solve(problem: Problem, *, max_candidates: int | None = None) -> Result:
     """Solve one assignment-level assignment-selection merge problem."""
-    candidates = enumerate_candidate_assignments(problem)
+    candidates = enumerate_candidate_assignments(problem, max_candidates=max_candidates)
     if isinstance(candidates, EnumerationExceeded):
         raise RuntimeError("candidate enumeration exceeded during solve")
 
