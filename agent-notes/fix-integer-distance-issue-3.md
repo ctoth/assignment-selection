@@ -1,0 +1,21 @@
+# Assignment-selection issue 3
+
+## Goal
+Fix integer distance precision and open a draft PR without merging or changing Propstore pins/source.
+
+## State
+Separate worktree/branch fix/integer-distance-issue-3, based on published d855496. Global instructions and repo source/tests/CI read; no local AGENTS.md/CLAUDE.md found. Focused dependency fixes and regression tests explicitly authorized by parent delegation.
+
+## Smallest change and decision
+About four source lines: subtract int/int endpoints exactly, then convert the difference to the existing float distance type. Preserve float/numeric-coercion/categorical behavior for all other input pairs. About forty regression-test lines cover adjacent signed-64-bit integers and SIGMA's unique majority winner. No new metric policy or broader numeric redesign.
+
+## Next step
+The new tests failed in all six cases before the change (four unit-distance cases and two SIGMA winner cases). After the four-line source fix, the same command passed all six in 0.49s:
+
+`uv run --no-project --offline --python C:/Users/Q/code/assignment-selection/.venv/Scripts/python.exe python -B -m pytest -p no:cacheprovider tests/test_integer_distances.py -q`
+
+PYTHONPATH selected this worktree's src; UV_CACHE_DIR selected its isolated cache. No dependencies installed. Full suite and typing will run in PR CI.
+
+Q separately approved the citation-only edit to issue #3. Replaced only the Propstore solve-owner line anchor 265 with 236, fetched the issue, and verified exact body equality with that one substitution.
+
+Next: publish the branch and draft PR, then inspect exact-head PR checks. Assess Doxa #3 separately.

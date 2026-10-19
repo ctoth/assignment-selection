@@ -25,7 +25,10 @@ class EnumerationExceeded:
 def claim_distance(a: Any, b: Any) -> float:
     """Distance between two claim values."""
     try:
-        distance = abs(float(a) - float(b))
+        if isinstance(a, int) and isinstance(b, int):
+            distance = float(abs(a - b))
+        else:
+            distance = abs(float(a) - float(b))
     except (ValueError, TypeError):
         return 0.0 if a == b else 1.0
     if not isfinite(distance):
