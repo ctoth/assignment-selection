@@ -18,4 +18,4 @@ PYTHONPATH selected this worktree's src; UV_CACHE_DIR selected its isolated cach
 
 Q separately approved the citation-only edit to issue #3. Replaced only the Propstore solve-owner line anchor 265 with 236, fetched the issue, and verified exact body equality with that one substitution.
 
-Next: publish the branch and draft PR, then inspect exact-head PR checks. Assess Doxa #3 separately.
+Published draft PR https://github.com/ctoth/assignment-selection/pull/4 at source commit 175d32533dc233cb25969154b9f8ca383a996294. Fetched the PR and verified its draft status and exact head. CI run 39339378017 passed all typing/test jobs on Python 3.11, 3.12, and 3.13. No merge or ready transition performed. This final note update records that outcome; verify the note-only final head before handoff.
